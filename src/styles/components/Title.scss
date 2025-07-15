@@ -1,0 +1,19 @@
+@use '../common/color.scss' as *;
+
+.title-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+
+    .logo{
+        font-size: 40px;
+    }
+    h1{
+        font-size: 28px;
+        font-weight: 600;
+        color: $text-P;
+        text-align: center;
+    }
+}

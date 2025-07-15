@@ -6,16 +6,16 @@ let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 900,
-        height: 680,
+        width: 640,
+        height: 400,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true,
             devTools: isDev,
         },
+        titleBarStyle: 'hiddenInset',
     });
 
-    // ***중요***
     mainWindow.loadURL(
         isDev
             ? "http://localhost:3000"

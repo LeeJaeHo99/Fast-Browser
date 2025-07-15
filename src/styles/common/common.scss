@@ -1,31 +1,8 @@
 @use './color' as *;
 
 body{
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    padding: 40px 32px;
     background-color: $bg-P;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: $text-P;
-}
-
-.inner{
-    display: flex;
-    width: 100%;
-    max-width: 1200px;
-    height: 100%;
-    margin: 0 auto;
-}
-
-.blur-box{
-    background-color: rgb(255 255 255 / 75%);
-    backdrop-filter: blur(4px);
-    box-shadow: 0 0 20px 8px rgb(148 132 132 / 19%);
-}
-
-.text-gradient{
-    background: linear-gradient(135deg, #b0e3ff, #c8b4ff, #eaa5dc, #ffc9a8);
-    background-clip: text;
-    color: transparent;
-}
-
-.page{
-    margin-top: 64px;
 }

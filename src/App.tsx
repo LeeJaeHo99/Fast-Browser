@@ -1,7 +1,9 @@
+import Title from "./components/Title";
+
 function App() {
     return (
         <div className="App">
-            <h1>Hello World</h1>
+            <Title title="Fast Browser" />
         </div>
     );
 }
