@@ -54,6 +54,16 @@ function AddModal({
     const [url, setUrl] = useState<string>("");
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
+    useEffect(() => {
+        urlRef.current?.focus();
+    }, []);
+
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            closeModal();
+        }
+    });
+
     const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
         if (url.length > 0 && name.length > 0) {
@@ -157,6 +167,12 @@ function TrashModal({
     const [faviconUrls, setFaviconUrls] = useState<{ [key: string]: string }>(
         {}
     );
+
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            closeModal();
+        }
+    });
 
     useEffect(() => {
         const loadFavicons = async () => {

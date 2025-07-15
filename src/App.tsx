@@ -20,6 +20,29 @@ function App() {
         setLinkData(savedData);
     }, []);
 
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.metaKey && !event.shiftKey && !event.altKey && !event.ctrlKey) {
+                const number = parseInt(event.key);
+                
+                if (number >= 1 && number <= 6) {
+                    event.preventDefault();
+                    
+                    const targetIndex = number - 1;
+                    
+                    if (linkData[targetIndex] && window.electronAPI) {
+                        window.electronAPI.openUrl(linkData[targetIndex].url);
+                    }
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [linkData]);
+
     const refreshData = () => {
         const updatedData = loadLinkData();
         setLinkData(updatedData);
@@ -78,11 +101,12 @@ function LinkContainer({ linkData }: { linkData: Link[] }) {
                     <span>Add Your Links!</span>
                 </div>
             ) : (
-                linkData.map((link) => {
+                linkData.map((link, index) => {
                     return (
                         <SelectedLink
                             link={link?.name}
                             url={link?.url}
+                            index={index + 1}
                             key={link?.name}
                         />
                     );

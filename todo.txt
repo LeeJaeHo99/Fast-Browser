@@ -14,3 +14,7 @@ globalShortcut은 main process에서만 등록 가능
 macOS에선 사용자가 단축키를 시스템 설정에서 차단할 수 있음
 
 앱이 종료될 때 단축키 해제해야 함:
+
+
+
+cmd + shift + x
