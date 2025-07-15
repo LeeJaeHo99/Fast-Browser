@@ -3,10 +3,10 @@
 .selected-link--container{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     row-gap: 32px;
-    width: 100%;
+    width: 90%;
     min-height: 210px;
     padding: 24px;
     margin: 0 auto;
@@ -24,13 +24,19 @@
         width: 30%;
         flex-basis: 30%;
 
+        &:hover{
+            &--icon{
+                transform: scale(1.1);
+            }
+        }
         &--icon{
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             filter: drop-shadow(0 0 10px $shadow-H);
+            transition: all 0.3s ease;
         }
         &--title{
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
             color: $text-P;
             text-align: center;

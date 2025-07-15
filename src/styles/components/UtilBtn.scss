@@ -1,0 +1,34 @@
+@use '../common/color.scss' as *;
+
+.util-btn--container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 90%;
+    margin-top: 12px;
+
+    .util-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1 1 0;
+        height: 48px;
+        background-color: $bg-S;
+        border: 1px solid $border-P;
+        border-radius: 14px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        &.plus:hover{
+            background-color: $accent-blue;
+        }
+        &.trash:hover{
+            background-color: $accent-red;
+        }
+        &.setting:hover{
+            background-color: $system-G_6;
+        }
+    }
+}
