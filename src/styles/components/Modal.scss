@@ -118,8 +118,8 @@
                 cursor: pointer;
 
                 &:has(input:checked){
-                    background-color: #ff3b3030;
-                    border: 1px solid transparent;
+                    background-color: #ff3b3020;
+                    border: 1px solid $accent-red__hover;
 
                     .link-item-content{
                         img{
