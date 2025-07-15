@@ -22,7 +22,7 @@ function createWindow() {
             preload: path.join(__dirname, "preload.cjs"),
         },
         titleBarStyle: 'hiddenInset',
-        // show: false, // 처음에 창을 숨김
+        show: false, // 처음에 창을 숨김
         skipTaskbar: true, // 독(Dock)에서 숨김
         alwaysOnTop: true, // 항상 최상위에 표시
         frame: false, // 프레임 제거
@@ -39,7 +39,6 @@ function createWindow() {
         mainWindow.webContents.openDevTools({ mode: "detach" });
     } 
 
-    // 창이 포커스를 잃으면 숨김
     mainWindow.on('blur', () => {
         if (!mainWindow.webContents.isDevToolsOpened()) {
             mainWindow.hide();
@@ -52,16 +51,17 @@ function createWindow() {
 }
 
 function createTray() {
-    // 트레이 아이콘 생성 (logo.png 사용)
+    // 트레이 아이콘 생성 - 상단바용 아이콘 사용
+    // macOS는 다크/라이트 모드에 따라 자동으로 색상 반전
     const iconPath = path.join(__dirname, 'assets/icons/logo.png');
     let trayIcon = nativeImage.createFromPath(iconPath);
     
-    // 상단바에 맞게 크기 조정 (16x16)
+    // 상단바에 맞게 크기 조정 (16x16, 32x32 자동 선택)
     trayIcon = trayIcon.resize({ width: 16, height: 16 });
-    trayIcon.setTemplateImage(true); // macOS 다크모드 지원
+    trayIcon.setTemplateImage(true); // macOS 다크모드 지원 (검은색 부분이 자동 반전)
     
     tray = new Tray(trayIcon);
-    tray.setToolTip('Fast Browser');
+    tray.setToolTip('Fast Browser - ⌘+숫자로 빠른 링크 열기');
     
     // 트레이 클릭 시 창 토글
     tray.on('click', () => {

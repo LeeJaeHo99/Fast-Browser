@@ -57,5 +57,37 @@
         "electron": "^37.2.1",
         "electron-builder": "^26.0.12",
         "wait-on": "^8.0.3"
+    },
+    "build": {
+        "appId": "com.fastbrowser.app",
+        "productName": "Fast Browser",
+        "directories": {
+            "output": "dist"
+        },
+        "files": [
+            "build/**/*",
+            "public/electron.js",
+            "public/preload.cjs",
+            "public/assets/**/*",
+            "node_modules/**/*"
+        ],
+        "mac": {
+            "icon": "public/assets/icons/logo_app.png",
+            "category": "public.app-category.productivity",
+            "target": [
+                {
+                    "target": "dmg",
+                    "arch": ["x64", "arm64"]
+                },
+                {
+                    "target": "zip",
+                    "arch": ["x64", "arm64"]
+                }
+            ]
+        },
+        "dmg": {
+            "title": "Fast Browser",
+            "backgroundColor": "#ffffff"
+        }
     }
 }
