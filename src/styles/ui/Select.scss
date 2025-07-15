@@ -1,0 +1,22 @@
+.Select {
+    appearance: none;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 14px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+        outline: none;
+    }
+
+    &:hover {
+        background-color: var(--bg-tertiary);
+    }
+}
