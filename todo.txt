@@ -8,7 +8,7 @@ trash 누르면 나오는 모달, 드래그앤 드랍 했을 때 삭제하겠습
 상태 관리
 notification = [loading, success, error]
 modal = [true, false]
-modalType = [add, trash, setting]
+modalType = [add, trash]
 
 
 

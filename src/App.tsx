@@ -4,11 +4,10 @@ import SelectedLink from "./components/SelectedLink";
 import UtilBtn from "./components/UtilBtn";
 import Notification from "./components/Notification";
 import Modal from "./components/Modal";
-import { Plus, Trash2, Settings } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import {
     clickPlusBtn,
     clickTrashBtn,
-    clickSettingBtn,
 } from "./utils/clickUtilBtn";
 import { linkData } from "./data/data";
 
@@ -35,12 +34,6 @@ function App() {
         clickTrashBtn();
     };
 
-    const clickSetting = () => {
-        setModal(true);
-        setModalType("setting");
-        clickSettingBtn();
-    };
-
     return (
         <div className="App">
             <Title title="Fast Browser" />
@@ -48,7 +41,6 @@ function App() {
             <UtilBtnContainer
                 clickPlus={clickPlus}
                 clickTrash={clickTrash}
-                clickSetting={clickSetting}
             />
             <Notification notification={notification} />
             {modal && <Modal modalType={modalType} closeModal={closeModal} />}
@@ -75,11 +67,9 @@ function LinkContainer() {
 function UtilBtnContainer({
     clickPlus,
     clickTrash,
-    clickSetting,
 }: {
     clickPlus: () => void;
     clickTrash: () => void;
-    clickSetting: () => void;
 }) {
     return (
         <div className="util-btn--container">
@@ -92,13 +82,6 @@ function UtilBtnContainer({
                 onClick={clickTrash}
             >
                 <Trash2 size={20} />
-            </UtilBtn>
-            <UtilBtn
-                className="setting"
-                tooltip="Settings"
-                onClick={clickSetting}
-            >
-                <Settings size={20} />
             </UtilBtn>
         </div>
     );

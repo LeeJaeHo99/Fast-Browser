@@ -16,11 +16,11 @@ export const linkData = [
         url: "https://www.nate.com",
     },
     {
-        name: "Daum",
+        name: "Daum1",
         url: "https://www.daum.net",
     },
     {
-        name: "Daum",
+        name: "Daum2",
         url: "https://www.daum.net",
     },
 ];
