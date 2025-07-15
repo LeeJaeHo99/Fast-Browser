@@ -1,0 +1,83 @@
+@use '../common/color.scss' as *;
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    background-color: $bg-S;
+    border: 1px solid $border-P;
+    border-radius: 14px;
+    box-shadow: 0 0 10px 0 $shadow-H;
+
+    h2{
+        font-size: 24px;
+        font-weight: 600;
+        color: $text-P;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+    .close-btn{
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        color: $accent-red;
+    }
+    form{
+        width: 100%;
+        height: auto;
+
+        label{
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: column;
+            gap: 16px;
+            width: 90%;
+            margin: 0 auto;
+            margin-bottom: 24px;
+
+            span{
+                font-size: 16px;
+                font-weight: 600;
+                color: $text-P;
+            }
+        }
+        button{
+            display: block;
+            width: 20%;
+            height: 40px;
+            margin: 0 auto;
+            margin-top: 40px;
+            padding: 0 12px;
+            background-color: $accent-blue;
+            border-radius: 8px;
+            color: $text-P;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+
+            &:hover{
+                background-color: $accent-blue__hover;
+                box-shadow: 0 0 10px 0 $shadow-M;
+            }
+        }
+    }
+    &.add-modal{
+        form{
+            label{
+                input{
+                    width: 100%;
+                    height: 40px;
+                    border: 1px solid $border-P;
+                    border-radius: 8px;
+                    padding: 0 12px;
+                    outline: none;
+                }
+            }
+        }
+    }
+}

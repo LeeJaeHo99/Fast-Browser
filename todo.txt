@@ -1,2 +1,19 @@
 0개일때는 가운데에 추가 버튼 생기게 + 쓰레기통 disabled
 6개일때 +버튼 disabled
+
++ 누르면 나오는 모달
+trash 누르면 나오는 모달, 드래그앤 드랍 했을 때 삭제하겠습니까 모달
+세팅 모달
+
+상태 관리
+notification = [loading, success, error]
+modal = [true, false]
+modalType = [add, trash, setting]
+
+
+
+AddUtilBTn 클릭시
+- modalType => add 
+- modal => true
+
+AddUtilBTn 추가 시
