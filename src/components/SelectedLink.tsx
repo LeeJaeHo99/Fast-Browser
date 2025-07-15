@@ -1,12 +1,18 @@
 export default function SelectedLink({ link, url }: { link?: string; url?: string }) {
+    const handleClick = () => {
+        if (url && window.electronAPI) {
+            window.electronAPI.openUrl(url);
+        }
+    };
+
     return (
-        <a href={url} className="selected-link">
+        <div className="selected-link" onClick={handleClick} style={{ cursor: 'pointer' }}>
             <img
                 src="/assets/icons/earth.png"
                 alt="logo"
                 className="selected-link--icon"
             />
             <div className="selected-link--title">{link}</div>
-        </a>
+        </div>
     );
 }
