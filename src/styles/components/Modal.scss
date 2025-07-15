@@ -78,6 +78,12 @@
                     outline: none;
                 }
             }
+            button{
+                &.disabled{
+                    background-color: $system-G_4;
+                    cursor: not-allowed;
+                }
+            }
         }
     }
     &.delete-modal{
@@ -155,6 +161,10 @@
 
                 &:hover{
                     background-color: $accent-red__hover;
+                }
+                &.disabled{
+                    background-color: $system-G_4;
+                    cursor: not-allowed;
                 }
             }
         }

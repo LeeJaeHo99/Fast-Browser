@@ -1,31 +1,20 @@
-type Link = {
-    name: string;
-    url: string;
+import { Link } from "../types/type";
+
+export const linkData: Link[] = [];
+
+export const loadLinkData = (): Link[] => {
+    if (typeof window !== 'undefined') {
+        if (window.electronAPI) {
+            return window.electronAPI.getUrls();
+        }
+    }
+    return [];
 };
 
-export const linkData: Link[] = [
-    {
-        name: "Naver",
-        url: "https://www.naver.com",
-    },
-    {
-        name: "Google",
-        url: "https://www.google.com",
-    },
-    {
-        name: "Daum",
-        url: "https://www.daum.net",
-    },
-    {
-        name: "Nate",
-        url: "https://www.nate.com",
-    },
-    {
-        name: "Daum1",
-        url: "https://www.daum.net",
-    },
-    {
-        name: "Daum2",
-        url: "https://www.daum.net",
-    },
-];
+export const saveLinkData = (url: string, name: string): void => {
+    if (typeof window !== 'undefined') {
+        if (window.electronAPI) {
+            window.electronAPI.saveUrl(url, name);
+        }
+    }
+};

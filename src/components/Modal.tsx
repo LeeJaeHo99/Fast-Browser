@@ -1,34 +1,73 @@
 import { useRef, useState } from "react";
 import { X } from "lucide-react";
-import { linkData } from "../data/data";
+import { Link } from "../types/type";
+import { saveLinkData } from "../data/data";
 
 export default function Modal({
     modalType,
     closeModal,
+    onDataChange,
+    linkData,
 }: {
     modalType: string;
     closeModal: () => void;
+    onDataChange: () => void;
+    linkData: Link[];
 }) {
     switch (modalType) {
         case "add":
-            return <AddModal closeModal={closeModal} />;
+            return (
+                <AddModal closeModal={closeModal} onDataChange={onDataChange} />
+            );
         case "trash":
-            return <TrashModal closeModal={closeModal} />;
+            return (
+                <TrashModal
+                    closeModal={closeModal}
+                    linkData={linkData}
+                    onDataChange={onDataChange}
+                />
+            );
         default:
             return null;
     }
 }
 
-function AddModal({ closeModal }: { closeModal: () => void }) {
+function AddModal({
+    closeModal,
+    onDataChange,
+}: {
+    closeModal: () => void;
+    onDataChange: () => void;
+}) {
     const urlRef = useRef<HTMLInputElement>(null);
     const [name, setName] = useState<string>("");
     const [url, setUrl] = useState<string>("");
+    const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
     const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
+        if (url.length > 0 && name.length > 0) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
     };
     const handleUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUrl(e.target.value);
+        if (url.length > 0 && name.length > 0) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (name.trim() && url.trim()) {
+            saveLinkData("https://" + url, name);
+            onDataChange?.();
+            closeModal();
+        }
     };
 
     return (
@@ -38,7 +77,7 @@ function AddModal({ closeModal }: { closeModal: () => void }) {
                 <X />
             </button>
             <div className="modal--content">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <label htmlFor="url">
                         <span>URL</span>
                         <input
@@ -60,15 +99,24 @@ function AddModal({ closeModal }: { closeModal: () => void }) {
                             onChange={handleName}
                         />
                     </label>
-                    <button type="submit">Add</button>
+                    <button type="submit" className={isDisabled ? "disabled" : ""}>Add</button>
                 </form>
             </div>
         </div>
     );
 }
 
-function TrashModal({ closeModal }: { closeModal: () => void }) {
+function TrashModal({
+    closeModal,
+    linkData,
+    onDataChange,
+}: {
+    closeModal: () => void;
+    linkData: Link[];
+    onDataChange: () => void;
+}) {
     const [selectedLinks, setSelectedLinks] = useState<string[]>([]);
+    const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
     const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.checked) {
@@ -78,7 +126,28 @@ function TrashModal({ closeModal }: { closeModal: () => void }) {
                 selectedLinks.filter((link) => link !== e.target.value)
             );
         }
-        console.log(selectedLinks);
+
+        if (selectedLinks.length > 0) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    };
+
+    const handleDelete = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (selectedLinks.length > 0) {
+            const remainingLinks = linkData.filter(
+                (link) => !selectedLinks.includes(link.name)
+            );
+
+            if (window.electronAPI) {
+                window.electronAPI.setUrls(remainingLinks);
+            }
+
+            onDataChange?.();
+            closeModal();
+        }
     };
 
     return (
@@ -88,9 +157,13 @@ function TrashModal({ closeModal }: { closeModal: () => void }) {
                 <X />
             </button>
             <div className="modal--content">
-                <form action="">
+                <form onSubmit={handleDelete}>
                     {linkData.map((link) => (
-                        <label className="link-item" key={link.name} htmlFor={link.name}>
+                        <label
+                            className="link-item"
+                            key={link.name}
+                            htmlFor={link.name}
+                        >
                             <input
                                 type="checkbox"
                                 onChange={handleCheckbox}
@@ -107,7 +180,7 @@ function TrashModal({ closeModal }: { closeModal: () => void }) {
                             </div>
                         </label>
                     ))}
-                    <button type="submit">Delete</button>
+                    <button type="submit" className={isDisabled ? "disabled" : ""}>Delete</button>
                 </form>
             </div>
         </div>

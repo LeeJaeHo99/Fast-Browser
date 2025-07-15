@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Title from "./components/Title";
 import SelectedLink from "./components/SelectedLink";
 import UtilBtn from "./components/UtilBtn";
@@ -6,12 +6,24 @@ import Notification from "./components/Notification";
 import Modal from "./components/Modal";
 import { Plus, Trash2, Smile } from "lucide-react";
 import { clickPlusBtn, clickTrashBtn } from "./utils/clickUtilBtn";
-import { linkData } from "./data/data";
+import { loadLinkData } from "./data/data";
+import { Link } from "./types/type";
 
 function App() {
     const [notification, setNotification] = useState<string>("");
     const [modal, setModal] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>("");
+    const [linkData, setLinkData] = useState<Link[]>([]);
+
+    useEffect(() => {
+        const savedData = loadLinkData();
+        setLinkData(savedData);
+    }, []);
+
+    const refreshData = () => {
+        const updatedData = loadLinkData();
+        setLinkData(updatedData);
+    };
 
     const closeModal = () => {
         setModal(false);
@@ -33,25 +45,32 @@ function App() {
     return (
         <div className="App">
             <Title title="Fast Browser" />
-            <LinkContainer />
+            <LinkContainer linkData={linkData} />
             <UtilBtnContainer
                 clickPlus={clickPlus}
                 clickTrash={clickTrash}
                 length={linkData.length}
             />
             <Notification notification={notification} />
-            {modal && <Modal modalType={modalType} closeModal={closeModal} />}
+            {modal && (
+                <Modal
+                    modalType={modalType}
+                    closeModal={closeModal}
+                    onDataChange={refreshData}
+                    linkData={linkData}
+                />
+            )}
         </div>
     );
 }
 
-function LinkContainer() {
+function LinkContainer({ linkData }: { linkData: Link[] }) {
     return (
         <div className="selected-link--container">
             {linkData.length === 0 ? (
                 <div className="empty-link">
                     <Smile />
-                    <span>Please add your link!</span>
+                    <span>Add Your Links!</span>
                 </div>
             ) : (
                 linkData.map((link) => {
