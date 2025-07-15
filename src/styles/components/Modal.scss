@@ -25,6 +25,11 @@
         top: 12px;
         right: 12px;
         color: $accent-red;
+        transition: all 0.3s ease;
+
+        &:hover{
+            color: $accent-red__hover;
+        }
     }
     form{
         width: 100%;

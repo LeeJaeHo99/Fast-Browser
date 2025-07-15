@@ -42,6 +42,10 @@ function App() {
         clickTrashBtn();
     };
 
+    const handleNotification = (notification: string) => {
+        setNotification(notification);
+    };
+
     return (
         <div className="App">
             <Title title="Fast Browser" />
@@ -58,6 +62,7 @@ function App() {
                     closeModal={closeModal}
                     onDataChange={refreshData}
                     linkData={linkData}
+                    handleNotification={handleNotification}
                 />
             )}
         </div>

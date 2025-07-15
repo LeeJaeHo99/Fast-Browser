@@ -9,16 +9,22 @@ export default function Modal({
     closeModal,
     onDataChange,
     linkData,
+    handleNotification,
 }: {
     modalType: string;
     closeModal: () => void;
     onDataChange: () => void;
     linkData: Link[];
+    handleNotification: (notification: string) => void;
 }) {
     switch (modalType) {
         case "add":
             return (
-                <AddModal closeModal={closeModal} onDataChange={onDataChange} />
+                <AddModal
+                    closeModal={closeModal}
+                    onDataChange={onDataChange}
+                    handleNotification={handleNotification}
+                />
             );
         case "trash":
             return (
@@ -26,6 +32,7 @@ export default function Modal({
                     closeModal={closeModal}
                     linkData={linkData}
                     onDataChange={onDataChange}
+                    handleNotification={handleNotification}
                 />
             );
         default:
@@ -36,9 +43,11 @@ export default function Modal({
 function AddModal({
     closeModal,
     onDataChange,
+    handleNotification,
 }: {
     closeModal: () => void;
     onDataChange: () => void;
+    handleNotification: (notification: string) => void;
 }) {
     const urlRef = useRef<HTMLInputElement>(null);
     const [name, setName] = useState<string>("");
@@ -64,10 +73,31 @@ function AddModal({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (name.trim() && url.trim()) {
-            saveLinkData("https://" + url, name);
-            onDataChange?.();
-            closeModal();
+        try {
+            if (name.trim() && url.trim()) {
+                if (url.includes("https://") || url.includes("http://")) {
+                    saveLinkData(url, name);
+                } else {
+                    saveLinkData("https://" + url, name);
+                }
+
+                onDataChange?.();
+
+                handleNotification("loading");
+                setTimeout(() => {
+                    closeModal();
+                    handleNotification("success");
+
+                    setTimeout(() => {
+                        handleNotification("");
+                    }, 1500);
+                }, 1000);
+            }
+        } catch (error) {
+            handleNotification("error");
+            setTimeout(() => {
+                handleNotification("");
+            }, 1500);
         }
     };
 
@@ -100,7 +130,12 @@ function AddModal({
                             onChange={handleName}
                         />
                     </label>
-                    <button type="submit" className={isDisabled ? "disabled" : ""}>Add</button>
+                    <button
+                        type="submit"
+                        className={isDisabled ? "disabled" : ""}
+                    >
+                        Add
+                    </button>
                 </form>
             </div>
         </div>
@@ -111,21 +146,25 @@ function TrashModal({
     closeModal,
     linkData,
     onDataChange,
+    handleNotification,
 }: {
     closeModal: () => void;
     linkData: Link[];
     onDataChange: () => void;
+    handleNotification: (notification: string) => void;
 }) {
     const [selectedLinks, setSelectedLinks] = useState<string[]>([]);
-    const [faviconUrls, setFaviconUrls] = useState<{ [key: string]: string }>({});
+    const [faviconUrls, setFaviconUrls] = useState<{ [key: string]: string }>(
+        {}
+    );
 
     useEffect(() => {
         const loadFavicons = async () => {
             const faviconMap: { [key: string]: string } = {};
-            
+
             for (const link of linkData) {
                 const faviconUrl = getFaviconUrl(link.url, 32);
-                
+
                 if (faviconUrl) {
                     // 각 파비콘이 로딩되는지 확인
                     const img = new Image();
@@ -135,16 +174,16 @@ function TrashModal({
                             resolve();
                         };
                         img.onerror = () => {
-                            faviconMap[link.name] = '/assets/icons/earth.png';
+                            faviconMap[link.name] = "/assets/icons/earth.png";
                             resolve();
                         };
                         img.src = faviconUrl;
                     });
                 } else {
-                    faviconMap[link.name] = '/assets/icons/earth.png';
+                    faviconMap[link.name] = "/assets/icons/earth.png";
                 }
             }
-            
+
             setFaviconUrls(faviconMap);
         };
 
@@ -165,17 +204,33 @@ function TrashModal({
 
     const handleDelete = (e: React.FormEvent) => {
         e.preventDefault();
-        if (selectedLinks.length > 0) {
-            const remainingLinks = linkData.filter(
-                (link) => !selectedLinks.includes(link.name)
-            );
+        try {
+            handleNotification("loading");
 
-            if (window.electronAPI) {
-                window.electronAPI.setUrls(remainingLinks);
+            if (selectedLinks.length > 0) {
+                const remainingLinks = linkData.filter(
+                    (link) => !selectedLinks.includes(link.name)
+                );
+
+                if (window.electronAPI) {
+                    window.electronAPI.setUrls(remainingLinks);
+                }
             }
-
             onDataChange?.();
-            closeModal();
+
+            setTimeout(() => {
+                closeModal();
+                handleNotification("success");
+
+                setTimeout(() => {
+                    handleNotification("");
+                }, 1500);
+            }, 1000);
+        } catch (error) {
+            handleNotification("error");
+            setTimeout(() => {
+                handleNotification("");
+            }, 1500);
         }
     };
 
@@ -202,7 +257,10 @@ function TrashModal({
                             />
                             <div className="link-item-content">
                                 <img
-                                    src={faviconUrls[link.name] || '/assets/icons/earth.png'}
+                                    src={
+                                        faviconUrls[link.name] ||
+                                        "/assets/icons/earth.png"
+                                    }
                                     alt="사이트 아이콘"
                                 />
                                 <span>{link.name}</span>

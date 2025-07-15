@@ -1,17 +1,16 @@
-0개일때는 가운데에 추가 버튼 생기게 + 쓰레기통 disabled
-6개일때 +버튼 disabled
-
-+ 누르면 나오는 모달
-trash 누르면 나오는 모달, 드래그앤 드랍 했을 때 삭제하겠습니까 모달
-세팅 모달
-
 상태 관리
 notification = [loading, success, error]
-modal = [true, false]
-modalType = [add, trash]
 
-AddUtilBTn 클릭시
-- modalType => add 
-- modal => true
+로고, 상태창에서 클릭, 단축키로 가능한지
 
-AddUtilBTn 추가 시
+
+⚠️ 주의할 점
+globalShortcut은 main process에서만 등록 가능
+
+앱이 백그라운드에 있더라도 단축키는 동작함
+
+앱이 꺼지면 단축키도 해제됨 (필요 시 auto-launch 설정 고려)
+
+macOS에선 사용자가 단축키를 시스템 설정에서 차단할 수 있음
+
+앱이 종료될 때 단축키 해제해야 함:

@@ -45,23 +45,24 @@
         &:hover{
             .selected-link--icon{
                 transform: scale(1.1);
+                filter: grayscale(0%);
             }
             .selected-link--title{
-                color: $accent-yellow;
+                color: $text-P;
             }
         }
         &--icon{
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             object-fit: contain;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1)) grayscale(50%);
             transition: all 0.3s ease;
         }
         &--title{
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
-            color: $text-P;
+            color: $text-S;
             text-align: center;
             transition: all 0.3s ease;
         }
