@@ -1,0 +1,39 @@
+@use '../common/color.scss' as *;
+
+.selected-link--container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 32px;
+    width: 100%;
+    min-height: 210px;
+    padding: 24px;
+    margin: 0 auto;
+    background-color: $bg-S;
+    border: 1px solid $border-P;
+    border-radius: 16px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+    .selected-link{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        width: 30%;
+        flex-basis: 30%;
+
+        &--icon{
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 0 10px $shadow-H);
+        }
+        &--title{
+            font-size: 20px;
+            font-weight: 600;
+            color: $text-P;
+            text-align: center;
+        }
+    }
+}
