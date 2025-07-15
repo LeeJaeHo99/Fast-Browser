@@ -159,4 +159,35 @@
             }
         }
     }
+
+    .modal--content {
+        form {
+            label {
+                input.error {
+                    border-color: #ff4444;
+                    box-shadow: 0 0 0 1px rgba(255, 68, 68, 0.2);
+                }
+                
+                .error-message {
+                    display: block;
+                    color: #ff4444;
+                    font-size: 12px;
+                    margin-top: 4px;
+                }
+                
+                .url-preview {
+                    display: block;
+                    color: #666;
+                    font-size: 12px;
+                    margin-top: 4px;
+                    word-break: break-all;
+                }
+            }
+            
+            button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+    }
 }

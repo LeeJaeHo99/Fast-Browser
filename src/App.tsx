@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Title from "./components/Title";
 import SelectedLink from "./components/SelectedLink";
 import UtilBtn from "./components/UtilBtn";
@@ -6,12 +6,27 @@ import Notification from "./components/Notification";
 import Modal from "./components/Modal";
 import { Plus, Trash2, Smile } from "lucide-react";
 import { clickPlusBtn, clickTrashBtn } from "./utils/clickUtilBtn";
-import { linkData } from "./data/data";
+import { loadLinkData } from "./data/data";
+
+type Link = {
+    name: string;
+    url: string;
+};
 
 function App() {
     const [notification, setNotification] = useState<string>("");
     const [modal, setModal] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>("");
+    const [linkData, setLinkData] = useState<Link[]>([]);
+
+    // 앱 시작시 저장된 데이터 로드
+    useEffect(() => {
+        const loadData = () => {
+            const savedData = loadLinkData();
+            setLinkData(savedData);
+        };
+        loadData();
+    }, []);
 
     const closeModal = () => {
         setModal(false);
@@ -30,22 +45,35 @@ function App() {
         clickTrashBtn();
     };
 
+    // 새 링크 추가 후 데이터 새로고침
+    const refreshData = () => {
+        const updatedData = loadLinkData();
+        setLinkData(updatedData);
+    };
+
     return (
         <div className="App">
             <Title title="Fast Browser" />
-            <LinkContainer />
+            <LinkContainer linkData={linkData} />
             <UtilBtnContainer
                 clickPlus={clickPlus}
                 clickTrash={clickTrash}
                 length={linkData.length}
             />
             <Notification notification={notification} />
-            {modal && <Modal modalType={modalType} closeModal={closeModal} />}
+            {modal && (
+                <Modal 
+                    modalType={modalType} 
+                    closeModal={closeModal}
+                    onDataChange={refreshData}
+                    linkData={linkData}
+                />
+            )}
         </div>
     );
 }
 
-function LinkContainer() {
+function LinkContainer({ linkData }: { linkData: Link[] }) {
     return (
         <div className="selected-link--container">
             {linkData.length === 0 ? (
