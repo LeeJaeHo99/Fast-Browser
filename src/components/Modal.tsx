@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { Link } from "../types/type";
 import { saveLinkData } from "../data/data";
+import { getFaviconUrl } from "../utils/faviconUtils";
 
 export default function Modal({
     modalType,
@@ -116,6 +117,41 @@ function TrashModal({
     onDataChange: () => void;
 }) {
     const [selectedLinks, setSelectedLinks] = useState<string[]>([]);
+    const [faviconUrls, setFaviconUrls] = useState<{ [key: string]: string }>({});
+
+    useEffect(() => {
+        const loadFavicons = async () => {
+            const faviconMap: { [key: string]: string } = {};
+            
+            for (const link of linkData) {
+                const faviconUrl = getFaviconUrl(link.url, 32);
+                
+                if (faviconUrl) {
+                    // 각 파비콘이 로딩되는지 확인
+                    const img = new Image();
+                    await new Promise<void>((resolve) => {
+                        img.onload = () => {
+                            faviconMap[link.name] = faviconUrl;
+                            resolve();
+                        };
+                        img.onerror = () => {
+                            faviconMap[link.name] = '/assets/icons/earth.png';
+                            resolve();
+                        };
+                        img.src = faviconUrl;
+                    });
+                } else {
+                    faviconMap[link.name] = '/assets/icons/earth.png';
+                }
+            }
+            
+            setFaviconUrls(faviconMap);
+        };
+
+        if (linkData.length > 0) {
+            loadFavicons();
+        }
+    }, [linkData]);
 
     const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.checked) {
@@ -166,8 +202,8 @@ function TrashModal({
                             />
                             <div className="link-item-content">
                                 <img
-                                    src="/assets/icons/earth.png"
-                                    alt="site-icon"
+                                    src={faviconUrls[link.name] || '/assets/icons/earth.png'}
+                                    alt="사이트 아이콘"
                                 />
                                 <span>{link.name}</span>
                             </div>
