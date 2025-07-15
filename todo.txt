@@ -10,8 +10,6 @@ notification = [loading, success, error]
 modal = [true, false]
 modalType = [add, trash]
 
-
-
 AddUtilBTn 클릭시
 - modalType => add 
 - modal => true

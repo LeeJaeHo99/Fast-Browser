@@ -1,4 +1,4 @@
-export default function SelectedLink({ link, url }: { link: string; url: string }) {
+export default function SelectedLink({ link, url }: { link?: string; url?: string }) {
     return (
         <a href={url} className="selected-link">
             <img

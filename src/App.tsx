@@ -4,13 +4,9 @@ import SelectedLink from "./components/SelectedLink";
 import UtilBtn from "./components/UtilBtn";
 import Notification from "./components/Notification";
 import Modal from "./components/Modal";
-import { Plus, Trash2 } from "lucide-react";
-import {
-    clickPlusBtn,
-    clickTrashBtn,
-} from "./utils/clickUtilBtn";
+import { Plus, Trash2, Smile } from "lucide-react";
+import { clickPlusBtn, clickTrashBtn } from "./utils/clickUtilBtn";
 import { linkData } from "./data/data";
-
 
 function App() {
     const [notification, setNotification] = useState<string>("");
@@ -41,6 +37,7 @@ function App() {
             <UtilBtnContainer
                 clickPlus={clickPlus}
                 clickTrash={clickTrash}
+                length={linkData.length}
             />
             <Notification notification={notification} />
             {modal && <Modal modalType={modalType} closeModal={closeModal} />}
@@ -51,15 +48,22 @@ function App() {
 function LinkContainer() {
     return (
         <div className="selected-link--container">
-            {linkData.map((link) => {
-                return (
-                    <SelectedLink
-                        link={link.name}
-                        url={link.url}
-                        key={link.name}
-                    />
-                );
-            })}
+            {linkData.length === 0 ? (
+                <div className="empty-link">
+                    <Smile />
+                    <span>Please add your link!</span>
+                </div>
+            ) : (
+                linkData.map((link) => {
+                    return (
+                        <SelectedLink
+                            link={link?.name}
+                            url={link?.url}
+                            key={link?.name}
+                        />
+                    );
+                })
+            )}
         </div>
     );
 }
@@ -67,19 +71,27 @@ function LinkContainer() {
 function UtilBtnContainer({
     clickPlus,
     clickTrash,
+    length,
 }: {
     clickPlus: () => void;
     clickTrash: () => void;
+    length: number;
 }) {
     return (
         <div className="util-btn--container">
-            <UtilBtn className="plus" tooltip="Add Link" onClick={clickPlus}>
+            <UtilBtn
+                className="plus"
+                tooltip="Add Link"
+                onClick={clickPlus}
+                disabled={length === 6}
+            >
                 <Plus size={20} />
             </UtilBtn>
             <UtilBtn
                 className="trash"
                 tooltip="Delete Link"
                 onClick={clickTrash}
+                disabled={length === 0}
             >
                 <Trash2 size={20} />
             </UtilBtn>

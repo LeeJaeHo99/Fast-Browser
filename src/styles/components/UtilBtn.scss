@@ -22,6 +22,15 @@
         transition: all 0.3s ease;
         cursor: pointer;
 
+        &.disabled{
+            cursor: not-allowed;
+            opacity: 0.5;
+
+            .util-btn--tooltip{
+                display: none;
+            }
+        }
+
         &.plus:hover{
             .util-btn--tooltip{
                 background-color: $accent-blue;

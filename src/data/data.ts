@@ -1,4 +1,9 @@
-export const linkData = [
+type Link = {
+    name: string;
+    url: string;
+};
+
+export const linkData: Link[] = [
     {
         name: "Naver",
         url: "https://www.naver.com",
