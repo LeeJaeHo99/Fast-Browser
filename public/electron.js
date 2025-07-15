@@ -9,7 +9,6 @@ const __dirname = path.dirname(__filename);
 let mainWindow;
 
 function createWindow() {
-    const preloadPath = path.join(__dirname, "preload.js");
 
     mainWindow = new BrowserWindow({
         width: 640,
@@ -18,8 +17,9 @@ function createWindow() {
             nodeIntegration: false,
             enableRemoteModule: false,
             contextIsolation: true,
+            sandbox: false,
             devTools: isDev,
-            preload: preloadPath,
+            preload: path.join(__dirname, "preload.cjs"),
         },
         titleBarStyle: 'hiddenInset',
     });

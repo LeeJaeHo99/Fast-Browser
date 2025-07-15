@@ -116,7 +116,6 @@ function TrashModal({
     onDataChange: () => void;
 }) {
     const [selectedLinks, setSelectedLinks] = useState<string[]>([]);
-    const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
     const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.checked) {
@@ -125,12 +124,6 @@ function TrashModal({
             setSelectedLinks(
                 selectedLinks.filter((link) => link !== e.target.value)
             );
-        }
-
-        if (selectedLinks.length > 0) {
-            setIsDisabled(false);
-        } else {
-            setIsDisabled(true);
         }
     };
 
@@ -180,7 +173,7 @@ function TrashModal({
                             </div>
                         </label>
                     ))}
-                    <button type="submit" className={isDisabled ? "disabled" : ""}>Delete</button>
+                    <button type="submit">Delete</button>
                 </form>
             </div>
         </div>
