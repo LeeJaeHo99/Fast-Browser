@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, nativeImage, globalShortcut, ipcMain } = await import("electron");
+const { app, BrowserWindow, Tray, nativeImage, globalShortcut, ipcMain, Menu } = await import("electron");
 const path = await import("path");
 const { fileURLToPath } = await import("url");
 
@@ -61,7 +61,6 @@ function createWindow() {
     mainWindow.webContents.on("did-fail-load", (event, errorCode, errorDescription) => {
         console.error("❌ Failed to load:", errorDescription);
     });
-
 }
 
 function createTray() {
@@ -83,6 +82,19 @@ function createTray() {
         } else {
             showWindow();
         }
+    });
+
+    tray.on('right-click', () => {
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: '종료하기',
+            click: () => {
+                app.quit();
+                mainWindow.hide();
+            }
+        }
+    ]);
+    tray.popUpContextMenu(contextMenu);
     });
 }
 
