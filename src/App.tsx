@@ -5,7 +5,6 @@ import UtilBtn from "./components/UtilBtn";
 import Notification from "./components/Notification";
 import Modal from "./components/Modal";
 import { Plus, Trash2, Smile } from "lucide-react";
-import { clickPlusBtn, clickTrashBtn } from "./utils/clickUtilBtn";
 import { loadLinkData } from "./data/data";
 import { Link } from "./types/type";
 
@@ -14,6 +13,17 @@ function App() {
     const [modal, setModal] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>("");
     const [linkData, setLinkData] = useState<Link[]>([]);
+
+    window.addEventListener("keydown", (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "a") {
+            setModalType("add");
+            setModal(true);
+        }
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "d") {
+            setModalType("trash");
+            setModal(true);
+        }
+    });
 
     useEffect(() => {
         const savedData = loadLinkData();
@@ -56,13 +66,11 @@ function App() {
     const clickPlus = () => {
         setModal(true);
         setModalType("add");
-        clickPlusBtn();
     };
 
     const clickTrash = () => {
         setModal(true);
         setModalType("trash");
-        clickTrashBtn();
     };
 
     const handleNotification = (notification: string) => {

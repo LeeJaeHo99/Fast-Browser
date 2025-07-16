@@ -1,5 +1,7 @@
 {
     "name": "fast-browser",
+    "description": "Fast Browser",
+    "author": "Lee JaeHo",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
@@ -11,13 +13,13 @@
         "@types/node": "^16.18.126",
         "@types/react": "^19.1.8",
         "@types/react-dom": "^19.1.6",
-        "electron-is-dev": "^3.0.1",
         "electron-store": "^10.1.0",
         "lucide-react": "^0.525.0",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
         "react-scripts": "5.0.1",
         "sass": "^1.89.2",
+        "tsc": "^2.0.4",
         "typescript": "^4.9.5",
         "web-vitals": "^2.1.4"
     },
@@ -77,11 +79,17 @@
             "target": [
                 {
                     "target": "dmg",
-                    "arch": ["x64", "arm64"]
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
                 },
                 {
                     "target": "zip",
-                    "arch": ["x64", "arm64"]
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
                 }
             ]
         },

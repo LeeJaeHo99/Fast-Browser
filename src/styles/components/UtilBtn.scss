@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    width: 90%;
+    width: 95%;
     margin-top: 12px;
 
     .util-btn{
@@ -17,7 +17,7 @@
         height: 48px;
         background-color: $bg-S;
         border: 1px solid $border-P;
-        border-radius: 14px;
+        border-radius: 12px;
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
         cursor: pointer;

@@ -123,7 +123,7 @@ function AddModal({
                         <span>URL</span>
                         <input
                             type="text"
-                            placeholder="URL"
+                            placeholder="Please enter the URL"
                             id="url"
                             ref={urlRef}
                             value={url}
@@ -134,10 +134,11 @@ function AddModal({
                         <span>Site Name</span>
                         <input
                             type="text"
-                            placeholder="Site Name"
+                            placeholder="Please enter the site name *(max 15)"
                             id="name"
                             value={name}
                             onChange={handleName}
+                            maxLength={15}
                         />
                     </label>
                     <button

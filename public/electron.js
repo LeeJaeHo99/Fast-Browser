@@ -1,18 +1,20 @@
 const { app, BrowserWindow, Tray, nativeImage, Menu } = await import("electron");
 const path = await import("path");
-const isDev = await import("electron-is-dev");
 const { fileURLToPath } = await import("url");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// app.isPackaged를 사용하여 정확한 환경 감지
+const isDev = !app.isPackaged;
 
 let mainWindow;
 let tray;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 640,
-        height: 495,
+        width: 480,
+        height: 470,
         webPreferences: {
             nodeIntegration: false,
             enableRemoteModule: false,
@@ -22,22 +24,28 @@ function createWindow() {
             preload: path.join(__dirname, "preload.cjs"),
         },
         titleBarStyle: 'hiddenInset',
-        show: false, // 처음에 창을 숨김
+        // show: false, // 처음에 창을 숨김
         skipTaskbar: true, // 독(Dock)에서 숨김
         alwaysOnTop: true, // 항상 최상위에 표시
         frame: false, // 프레임 제거
+        closable: false,      // X 버튼 제거
+        minimizable: false,   // 최소화 버튼 제거
+        maximizable: false,   // 최대화 버튼 제거
         resizable: false, // 크기 조정 불가
     });
 
-    mainWindow.loadURL(
-        isDev
-            ? "http://localhost:3000"
-            : `file://${path.join(__dirname, "../build/index.html")}`
-    );
+    const url = isDev
+        ? 'http://localhost:3000'
+        : `file://${path.join(__dirname, '../build/index.html')}`;
 
-    if (isDev){
+    console.log('📦 Is Dev Mode:', isDev);
+    console.log('📦 Loading URL:', url);
+
+    mainWindow.loadURL(url);
+
+    if (isDev) {
         mainWindow.webContents.openDevTools({ mode: "detach" });
-    } 
+    }
 
     mainWindow.on('blur', () => {
         if (!mainWindow.webContents.isDevToolsOpened()) {
@@ -48,6 +56,11 @@ function createWindow() {
     mainWindow.on("closed", () => {
         mainWindow = null;
     });
+
+    mainWindow.webContents.on("did-fail-load", (event, errorCode, errorDescription) => {
+        console.error("❌ Failed to load:", errorDescription);
+    });
+
 }
 
 function createTray() {
@@ -55,14 +68,14 @@ function createTray() {
     // macOS는 다크/라이트 모드에 따라 자동으로 색상 반전
     const iconPath = path.join(__dirname, 'assets/icons/logo.png');
     let trayIcon = nativeImage.createFromPath(iconPath);
-    
+
     // 상단바에 맞게 크기 조정 (16x16, 32x32 자동 선택)
     trayIcon = trayIcon.resize({ width: 16, height: 16 });
     trayIcon.setTemplateImage(true); // macOS 다크모드 지원 (검은색 부분이 자동 반전)
-    
+
     tray = new Tray(trayIcon);
     tray.setToolTip('Fast Browser - ⌘+숫자로 빠른 링크 열기');
-    
+
     // 트레이 클릭 시 창 토글
     tray.on('click', () => {
         if (mainWindow.isVisible()) {
@@ -71,7 +84,7 @@ function createTray() {
             showWindow();
         }
     });
-    
+
     // 우클릭 컨텍스트 메뉴 추가
     const contextMenu = Menu.buildFromTemplate([
         {
@@ -90,7 +103,7 @@ function createTray() {
             }
         }
     ]);
-    
+
     tray.setContextMenu(contextMenu);
 }
 
@@ -99,15 +112,15 @@ function showWindow() {
         createWindow();
         return;
     }
-    
+
     // 트레이 아이콘 위치 가져오기
     const trayBounds = tray.getBounds();
     const windowBounds = mainWindow.getBounds();
-    
+
     // 창을 트레이 아이콘 아래에 위치시키기
     const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2));
     const y = Math.round(trayBounds.y + trayBounds.height);
-    
+
     mainWindow.setPosition(x, y, false);
     mainWindow.show();
     mainWindow.focus();
