@@ -34,7 +34,8 @@ function createWindow() {
         closable: false,      // X 버튼 제거
         minimizable: false,   // 최소화 버튼 제거
         maximizable: false,   // 최대화 버튼 제거
-        resizable: false, // 크기 조정 불가
+        resizable: false,     // 크기 조정 불가
+        movable: false,       // 창 이동 불가
     });
 
     const url = isDev

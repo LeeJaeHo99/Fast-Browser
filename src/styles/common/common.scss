@@ -10,7 +10,6 @@ body{
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: $text-P;
     overflow: hidden;
-    -webkit-app-region: drag;
 }
 
 .App{
@@ -18,7 +17,4 @@ body{
     flex-direction: column;
     align-items: center;
     position: relative;
-}
-button, .selected-link, .util-btn, input, textarea, select {
-    -webkit-app-region: no-drag;
 }
