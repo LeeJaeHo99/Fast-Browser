@@ -1,4 +1,4 @@
-const { contextBridge, shell } = require("electron");
+const { contextBridge, shell, ipcRenderer } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
@@ -10,7 +10,6 @@ const dataFilePath = path.join(appDataPath, "links.json");
 // 폴더가 없으면 생성
 if (!fs.existsSync(appDataPath)) {
     fs.mkdirSync(appDataPath, { recursive: true });
-    console.log("Created data directory:", appDataPath);
 }
 
 // 파일에서 데이터 읽기
@@ -31,7 +30,6 @@ function readData() {
 function writeData(data) {
     try {
         fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
-        console.log("Data saved to:", dataFilePath);
     } catch (error) {
         console.error("Error saving data:", error);
     }
@@ -39,25 +37,22 @@ function writeData(data) {
 
 contextBridge.exposeInMainWorld("electronAPI", {
     saveUrl: (url, name) => {
-        console.log("Saving URL:", url, name);
         const data = readData();
         data.push({ name, url });
         writeData(data);
     },
     getUrls: () => {
-        console.log("Getting URLs");
         return readData();
     },
     clearUrls: () => {
-        console.log("Clearing URLs");
         writeData([]);
     },
     setUrls: (urls) => {
-        console.log("Setting URLs:", urls);
         writeData(urls);
     },
     openUrl: (url) => {
-        console.log("Opening URL in default browser:", url);
         shell.openExternal(url);
+        // 링크를 연 후 앱 숨기기
+        ipcRenderer.send('hide-app');
     },
 });

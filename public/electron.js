@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, nativeImage, Menu, globalShortcut } = await import("electron");
+const { app, BrowserWindow, Tray, nativeImage, globalShortcut, ipcMain } = await import("electron");
 const path = await import("path");
 const { fileURLToPath } = await import("url");
 
@@ -40,9 +40,6 @@ function createWindow() {
     const url = isDev
         ? 'http://localhost:3000'
         : `file://${path.join(__dirname, '../build/index.html')}`;
-
-    console.log('📦 Is Dev Mode:', isDev);
-    console.log('📦 Loading URL:', url);
 
     mainWindow.loadURL(url);
 
@@ -114,7 +111,7 @@ app.on("ready", () => {
     createTray();
     
     // 전역 단축키 등록
-    const shortcutRegistered = globalShortcut.register(GLOBAL_SHORTCUT, () => {
+    globalShortcut.register(GLOBAL_SHORTCUT, () => {
         if (mainWindow.isVisible()) {
             mainWindow.hide();
         } else {
@@ -122,11 +119,12 @@ app.on("ready", () => {
         }
     });
     
-    if (!shortcutRegistered) {
-        console.log('❌ 단축키 등록 실패:', GLOBAL_SHORTCUT);
-    } else {
-        console.log('✅ 단축키 등록 성공:', GLOBAL_SHORTCUT);
-    }
+    // 링크 클릭 시 앱 숨기기 이벤트 리스너
+    ipcMain.on('hide-app', () => {
+        if (mainWindow && mainWindow.isVisible()) {
+            mainWindow.hide();
+        }
+    });
 });
 
 app.on("activate", () => {
