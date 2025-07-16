@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, nativeImage, Menu } = await import("electron");
+const { app, BrowserWindow, Tray, nativeImage, Menu, globalShortcut } = await import("electron");
 const path = await import("path");
 const { fileURLToPath } = await import("url");
 
@@ -10,6 +10,9 @@ const isDev = !app.isPackaged;
 
 let mainWindow;
 let tray;
+
+// 전역 단축키 설정 (원하는 단축키로 변경 가능)
+const GLOBAL_SHORTCUT = 'CommandOrControl+Shift+X';
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -76,7 +79,6 @@ function createTray() {
     tray = new Tray(trayIcon);
     tray.setToolTip('Fast Browser - ⌘+숫자로 빠른 링크 열기');
 
-    // 트레이 클릭 시 창 토글
     tray.on('click', () => {
         if (mainWindow.isVisible()) {
             mainWindow.hide();
@@ -84,27 +86,6 @@ function createTray() {
             showWindow();
         }
     });
-
-    // 우클릭 컨텍스트 메뉴 추가
-    const contextMenu = Menu.buildFromTemplate([
-        {
-            label: 'Fast Browser 열기',
-            click: () => {
-                showWindow();
-            }
-        },
-        {
-            type: 'separator'
-        },
-        {
-            label: '종료',
-            click: () => {
-                app.quit();
-            }
-        }
-    ]);
-
-    tray.setContextMenu(contextMenu);
 }
 
 function showWindow() {
@@ -131,6 +112,21 @@ app.dock.hide(); // 독(Dock)에서 앱 숨김
 app.on("ready", () => {
     createWindow();
     createTray();
+    
+    // 전역 단축키 등록
+    const shortcutRegistered = globalShortcut.register(GLOBAL_SHORTCUT, () => {
+        if (mainWindow.isVisible()) {
+            mainWindow.hide();
+        } else {
+            showWindow();
+        }
+    });
+    
+    if (!shortcutRegistered) {
+        console.log('❌ 단축키 등록 실패:', GLOBAL_SHORTCUT);
+    } else {
+        console.log('✅ 단축키 등록 성공:', GLOBAL_SHORTCUT);
+    }
 });
 
 app.on("activate", () => {
@@ -142,8 +138,11 @@ app.on("window-all-closed", (e) => {
     e.preventDefault();
 });
 
-// 앱 완전 종료 시 트레이도 정리
+// 앱 완전 종료 시 트레이와 단축키 정리
 app.on('before-quit', () => {
+    // 전역 단축키 해제
+    globalShortcut.unregisterAll();
+    
     if (tray) {
         tray.destroy();
     }
