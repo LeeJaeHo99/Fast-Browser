@@ -141,7 +141,7 @@ function UtilBtnContainer({
                 onClick={clickPlus}
                 disabled={length === 6}
             >
-                <Plus size={20} />
+                <Plus size={18} />
             </UtilBtn>
             <UtilBtn
                 className="trash"
@@ -149,7 +149,7 @@ function UtilBtnContainer({
                 onClick={clickTrash}
                 disabled={length === 0}
             >
-                <Trash2 size={20} />
+                <Trash2 size={18} />
             </UtilBtn>
         </div>
     );

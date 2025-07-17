@@ -52,7 +52,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
     },
     openUrl: (url) => {
         shell.openExternal(url);
-        // 링크를 연 후 앱 숨기기
         ipcRenderer.send('hide-app');
     },
 });

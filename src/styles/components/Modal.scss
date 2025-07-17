@@ -15,7 +15,7 @@
     box-shadow: 0 0 10px 0 $shadow-H;
 
     h2{
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 600;
         color: $text-P;
         text-align: center;
@@ -53,8 +53,8 @@
         }
         button{
             display: block;
-            width: 20%;
-            height: 40px;
+            width: 30%;
+            height: 34px;
             margin: 0 auto;
             margin-top: 40px;
             padding: 0 12px;
@@ -96,7 +96,7 @@
     }
     &.delete-modal{
         h2{
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
         form{
             display: flex;
@@ -112,9 +112,9 @@
                 justify-content: center;
                 flex-direction: column;
                 gap: 12px;
-                flex-basis: 30.4%;
+                flex-basis: 29.2%;
                 position: relative;
-                width: 30.4%;
+                width: 29.2%;
                 padding: 8px;
                 margin: 0;
                 background-color: $bg-P;
@@ -159,7 +159,7 @@
                         user-select: none;
                     }
                     span{
-                        font-size: 16px;
+                        font-size: 12px;
                         font-weight: 600;
                         color: $text-P;
                         user-select: none;

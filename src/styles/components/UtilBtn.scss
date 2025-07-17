@@ -14,7 +14,7 @@
         justify-content: center;
         flex: 1 1 0;
         position: relative;
-        height: 48px;
+        height: 40px;
         background-color: $bg-S;
         border: 1px solid $border-P;
         border-radius: 12px;
@@ -63,7 +63,7 @@
             height: 100%;
             background-color: $bg-S;
             border-radius: 14px;
-            font-size: 16px;
+            font-size: 14px;
             opacity: 0;
             user-select: none;
             transition: all 0.3s ease;
