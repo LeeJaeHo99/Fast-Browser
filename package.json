@@ -13,6 +13,7 @@
         "@types/node": "^16.18.126",
         "@types/react": "^19.1.8",
         "@types/react-dom": "^19.1.6",
+        "auto-launch": "^5.0.6",
         "electron-store": "^10.1.0",
         "lucide-react": "^0.525.0",
         "react": "^19.1.0",
@@ -79,7 +80,9 @@
             "target": [
                 {
                     "target": "dmg",
-                    "arch": ["universal"]
+                    "arch": [
+                        "universal"
+                    ]
                 }
             ]
         },

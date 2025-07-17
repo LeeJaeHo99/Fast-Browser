@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Tray, nativeImage, globalShortcut, ipcMain, Menu } = await import("electron");
 const path = await import("path");
 const { fileURLToPath } = await import("url");
+const AutoLaunch = (await import("auto-launch")).default;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +14,12 @@ let tray;
 
 // 전역 단축키 설정 (원하는 단축키로 변경 가능)
 const GLOBAL_SHORTCUT = 'CommandOrControl+Shift+X';
+
+// 자동 시작 설정
+const autoLauncher = new AutoLaunch({
+    name: 'Fast Browser',
+    path: app.getPath('exe'), // 실행 파일 경로
+});
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -27,7 +34,7 @@ function createWindow() {
             preload: path.join(__dirname, "preload.cjs"),
         },
         titleBarStyle: 'hiddenInset',
-        // show: false, // 처음에 창을 숨김
+        show: false, // 시작 시 창을 숨김 (상단바에만 아이콘 표시)
         skipTaskbar: true, // 독(Dock)에서 숨김
         alwaysOnTop: true, // 항상 최상위에 표시
         frame: false, // 프레임 제거
@@ -85,16 +92,16 @@ function createTray() {
     });
 
     tray.on('right-click', () => {
-    const contextMenu = Menu.buildFromTemplate([
-        {
-            label: '종료하기',
-            click: () => {
-                app.quit();
-                mainWindow.hide();
-            }
-        }
-    ]);
-    tray.popUpContextMenu(contextMenu);
+                const contextMenu = Menu.buildFromTemplate([
+                    {
+                        label: '종료하기',
+                        click: () => {
+                            app.quit();
+                            mainWindow.hide();
+                        }
+                    }
+                ]);
+                tray.popUpContextMenu(contextMenu);
     });
 }
 
@@ -119,9 +126,40 @@ function showWindow() {
 
 app.dock.hide(); // 독(Dock)에서 앱 숨김
 
+// 중복 실행 방지
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+    // 이미 다른 인스턴스가 실행 중이면 종료
+    app.quit();
+} else {
+    // 두 번째 인스턴스가 실행되려 할 때 기존 창을 표시
+    app.on('second-instance', () => {
+        if (mainWindow) {
+            if (!mainWindow.isVisible()) {
+                showWindow();
+            }
+            mainWindow.focus();
+        }
+    });
+}
+
 app.on("ready", () => {
     createWindow();
     createTray();
+    
+    // 자동 시작 설정 (프로덕션 환경에서만)
+    if (!isDev) {
+        autoLauncher.isEnabled()
+            .then((isEnabled) => {
+                if (!isEnabled) {
+                    return autoLauncher.enable();
+                }
+            })
+            .catch((err) => {
+                console.error('❌ 자동 시작 설정 실패:', err);
+            });
+    }
     
     // 전역 단축키 등록
     globalShortcut.register(GLOBAL_SHORTCUT, () => {
@@ -140,12 +178,7 @@ app.on("ready", () => {
     });
 });
 
-app.on("activate", () => {
-    // macOS에서는 트레이 앱이므로 창을 다시 만들지 않음
-});
-
 app.on("window-all-closed", (e) => {
-    // 창이 모두 닫혀도 앱을 종료하지 않음 (트레이에 남아있음)
     e.preventDefault();
 });
 
